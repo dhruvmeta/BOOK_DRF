@@ -10,7 +10,7 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = BOOK
         fields = '__all__'
-        read_only_fields = ('author')
+        read_only_fields = ['author']
 
 class userializer(serializers.ModelSerializer):
     class Meta:
