@@ -13,6 +13,8 @@ from rest_framework import permissions
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 from django.shortcuts import get_object_or_404
 from rest_framework.pagination import PageNumberPagination
+from django.core.mail import send_mail
+from BOOK import settings
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -37,6 +39,13 @@ class userregister(APIView):
         serializers=UserSerializer(data=request.data)
         if serializers.is_valid():
             emp=serializers.save()
+            #user_email = request.data.get("email") 
+            # Email send
+            sub ="Welcome!!!"
+            msg =f"Dear User !\nYour Account has been created with us !\nEnjoy our service .\nif any query ,contact us at \nmetadhruv4@gmail.com | 7435820532"
+            from_Email=settings.EMAIL_HOST_USER
+            to_email=[emp.email]
+            send_mail(subject=sub,message=msg,from_email=from_Email,recipient_list=to_email)
             token=get_tokens_for_user(emp)
             return Response({'token': token, 'data':serializers.data}, status=status.HTTP_201_CREATED)
         return Response(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
